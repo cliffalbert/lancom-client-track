@@ -59,7 +59,7 @@
  $upcount = 0;
  $expcount = 0;
 
- $pSQL = pg_pconnect ("host=localhost dbname=wifitrack user=wifitrack password=lanc0m");
+ $pSQL = pg_pconnect ("host=$dbHost dbname=$dbName user=$dbUser password=$dbPass");
 
  $seenClientsTable = snmprealwalk( $snmp_host, $snmp_community, "iso.3.6.1.4.1.2356.11.1.3.45.1.1" );
 
