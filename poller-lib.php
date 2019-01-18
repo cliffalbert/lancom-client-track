@@ -2,9 +2,9 @@
 
  function lcgetvar($mac,$type)
  {
-	 global $snmp_host, $snmp_community;
+	 global $snmp_host, $snmp_community, $lancomBaseOID;
 
-	 if ($result = snmpget($snmp_host,$snmp_community,"iso.3.6.1.4.1.2356.11.1.3.45.1.$type.$mac")) {
+	 if ($result = snmpget($snmp_host,$snmp_community,"$lancomBaseOID.$type.$mac")) {
 		 return stripsnmp($result);
 	 } else {
 		 return FALSE;
@@ -59,13 +59,15 @@
  $upcount = 0;
  $expcount = 0;
 
+ $lancomBaseOID = "iso.3.6.1.4.1.2356.11.1.3.45.1";
+
  $pSQL = pg_pconnect ("host=$dbHost dbname=$dbName user=$dbUser password=$dbPass");
 
- $seenClientsTable = snmprealwalk( $snmp_host, $snmp_community, "iso.3.6.1.4.1.2356.11.1.3.45.1.1" );
+ $seenClientsTable = snmprealwalk( $snmp_host, $snmp_community, "$lancomBaseOID.1" );
 
  foreach ($seenClientsTable as $oid => $value) {
 	 $totcount++;
-	 $dec_mac = str_replace("iso.3.6.1.4.1.2356.11.1.3.45.1.1.", "", $oid); 
+	 $dec_mac = str_replace("$lancomBaseOID.1.", "", $oid); 
 	 $hex_mac = decmachex($dec_mac);
 	 dprint("$hex_mac");
 	 if (lcgetvar ($dec_mac, 5)) {
